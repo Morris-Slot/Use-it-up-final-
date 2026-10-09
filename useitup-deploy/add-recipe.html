@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Add Recipe — USE IT UP</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <header class="site-header"></header>
+
+  <main style="padding-top: 5rem; padding-bottom: 6rem;">
+    <div class="container container-tight">
+      <div class="page-hero text-center" style="padding-top: 3rem; padding-bottom: 2rem;">
+        <h1 id="add-recipe-heading">Add your recipe</h1>
+        <p id="add-recipe-subtitle">Upload a photo and let USE IT UP AI help structure it — you're always in control.</p>
+      </div>
+
+      <div id="success-view" style="display: none; background: var(--bg-surface); border-radius: var(--radius-xl); padding: 4rem 2rem; text-align: center; border: 1px solid var(--border); box-shadow: var(--card-shadow);">
+        <div style="width: 4.5rem; height: 4.5rem; border-radius: var(--radius-full); background: rgba(92, 158, 111, 0.15); color: var(--leaf-dark); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+          <i data-lucide="check" style="width: 2.5rem; height: 2.5rem;"></i>
+        </div>
+        <h2 style="font-size: 2rem; margin-bottom: 0.75rem;" id="success-title">Recipe published!</h2>
+        <p style="color: var(--text-muted); font-size: 1.125rem; margin-bottom: 2rem;" id="success-desc">
+          Thanks for helping others use it up.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+          <a href="recipes.html" class="btn btn-primary">Browse Recipes</a>
+          <button id="add-another-btn" class="btn btn-outline">Add another</button>
+        </div>
+      </div>
+
+      <form id="add-recipe-form" style="background: var(--bg-surface); border-radius: var(--radius-xl); padding: 2.5rem; border: 1px solid var(--border); box-shadow: var(--card-shadow);">
+        <!-- Photo upload -->
+        <div class="form-group">
+          <label class="form-label" id="photo-label">Recipe photo</label>
+          <div id="recipe-dropzone" style="border: 2px dashed var(--border); border-radius: var(--radius-md); padding: 2.5rem 1.5rem; text-align: center; cursor: pointer; aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg-surface-secondary);">
+            <i data-lucide="camera" style="width: 2.5rem; height: 2.5rem; color: var(--text-muted); margin-bottom: 0.5rem;"></i>
+            <span style="font-size: 0.9375rem; color: var(--text-muted);" id="dropzone-text">Click to upload a dish photo</span>
+            <input type="file" id="recipe-photo-input" accept="image/*" style="display: none;">
+          </div>
+          <div id="recipe-preview-box" style="display: none; position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16/9; margin-top: 0.5rem;">
+            <img id="recipe-preview-img" src="" alt="Recipe" style="width: 100%; height: 100%; object-fit: cover;">
+            <div id="ai-photo-analyzing" style="display: none; position: absolute; inset: 0; background: rgba(42, 60, 97, 0.75); color: var(--cream); flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;">
+              <i data-lucide="sparkles" style="animation: spin 2s linear infinite;"></i>
+              <span id="ai-analyzing-text" style="font-size: 0.875rem; font-weight: 600;">AI analyzing your dish...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recipe Name -->
+        <div class="form-group">
+          <label class="form-label" id="name-label">Recipe name</label>
+          <input type="text" id="recipe-title-input" class="form-input" placeholder="e.g. Grandma's Vegetable Soup" required>
+        </div>
+
+        <!-- Metadata row -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div>
+            <label class="form-label">Time</label>
+            <input type="text" id="recipe-time-input" class="form-input" value="25 min" required>
+          </div>
+          <div>
+            <label class="form-label">Difficulty</label>
+            <select id="recipe-diff-select" class="form-select">
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Servings</label>
+            <input type="number" id="recipe-servings-input" class="form-input" value="2" min="1" required>
+          </div>
+        </div>
+
+        <!-- Ingredients list -->
+        <div class="form-group">
+          <label class="form-label" id="ingredients-label">Ingredients</label>
+          <div class="chips-container" id="added-ingredients-chips"></div>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="ing-text-input" class="form-input" placeholder="Type ingredient and press enter...">
+            <button type="button" id="add-ing-btn" class="btn btn-outline" style="padding: 0.5rem 1.25rem;">Add</button>
+          </div>
+        </div>
+
+        <!-- Preparation Steps -->
+        <div class="form-group">
+          <label class="form-label" id="steps-label">Preparation steps</label>
+          <div id="steps-container" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <div class="step-input-row" style="display: flex; gap: 0.5rem; align-items: center;">
+              <span style="font-weight: 700; width: 1.5rem; text-align: center;">1</span>
+              <input type="text" class="form-input step-input" placeholder="Describe this step..." required>
+            </div>
+          </div>
+          <button type="button" id="add-step-btn" class="btn btn-outline" style="font-size: 0.8125rem; padding: 0.4rem 0.85rem;">
+            + Add step
+          </button>
+        </div>
+
+        <!-- Tips -->
+        <div class="form-group">
+          <label class="form-label">Cooking tips (optional)</label>
+          <input type="text" id="recipe-tips-input" class="form-input" placeholder="e.g. Save pasta water to loosen sauce">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; margin-top: 1.5rem; font-size: 1rem;" id="publish-btn">
+          Publish recipe
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const Store = window.USEITUP_STORE;
+      const AI = window.USEITUP_AI;
+
+      // Translations
+      document.getElementById("add-recipe-heading").textContent = Store.t("add_recipe_heading");
+      document.getElementById("add-recipe-subtitle").textContent = Store.t("add_recipe_subtitle");
+      document.getElementById("photo-label").textContent = Store.t("recipe_photo_label");
+      document.getElementById("dropzone-text").textContent = Store.t("click_upload_dish");
+      document.getElementById("ai-analyzing-text").textContent = Store.t("ai_analyzing_dish");
+      document.getElementById("name-label").textContent = Store.t("recipe_name_label");
+      document.getElementById("steps-label").textContent = Store.t("steps_label");
+      document.getElementById("add-step-btn").textContent = Store.t("add_step");
+      document.getElementById("publish-btn").textContent = Store.t("publish_recipe");
+      document.getElementById("success-title").textContent = Store.t("recipe_published_title");
+      document.getElementById("success-desc").textContent = Store.t("recipe_published_desc");
+
+      const form = document.getElementById("add-recipe-form");
+      const successView = document.getElementById("success-view");
+      const dropzone = document.getElementById("recipe-dropzone");
+      const fileInput = document.getElementById("recipe-photo-input");
+      const previewBox = document.getElementById("recipe-preview-box");
+      const previewImg = document.getElementById("recipe-preview-img");
+      const aiLoader = document.getElementById("ai-photo-analyzing");
+
+      let recipeIngredients = ["Tomato", "Pasta"];
+      let recipeImageUrl = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&q=80&auto=format&fit=crop";
+
+      dropzone.onclick = () => fileInput.click();
+
+      fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          recipeImageUrl = URL.createObjectURL(file);
+          previewImg.src = recipeImageUrl;
+          dropzone.style.display = "none";
+          previewBox.style.display = "block";
+          aiLoader.style.display = "flex";
+
+          try {
+            const result = await AI.analyzeRecipeImage(file);
+            if (result.suggestedIngredients && result.suggestedIngredients.length) {
+              result.suggestedIngredients.forEach(ing => {
+                if (!recipeIngredients.includes(ing)) recipeIngredients.push(ing);
+              });
+              renderIngredients();
+            }
+          } catch (err) {
+            console.warn(err);
+          } finally {
+            aiLoader.style.display = "none";
+          }
+        }
+      };
+
+      // Ingredient chips management
+      const chipsEl = document.getElementById("added-ingredients-chips");
+      const ingInput = document.getElementById("ing-text-input");
+      const addIngBtn = document.getElementById("add-ing-btn");
+
+      function renderIngredients() {
+        chipsEl.innerHTML = recipeIngredients.map(ing => `
+          <div class="ingredient-chip">
+            <span>${ing}</span>
+            <span class="chip-remove" data-ing="${ing}">&times;</span>
+          </div>
+        `).join("");
+
+        chipsEl.querySelectorAll(".chip-remove").forEach(btn => {
+          btn.onclick = () => {
+            const ing = btn.getAttribute("data-ing");
+            recipeIngredients = recipeIngredients.filter(i => i !== ing);
+            renderIngredients();
+          };
+        });
+      }
+
+      function addIng() {
+        const val = ingInput.value.trim();
+        if (val && !recipeIngredients.includes(val)) {
+          recipeIngredients.push(val);
+          renderIngredients();
+          ingInput.value = "";
+        }
+      }
+
+      addIngBtn.onclick = addIng;
+      ingInput.onkeydown = (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          addIng();
+        }
+      };
+      renderIngredients();
+
+      // Dynamic steps
+      const stepsContainer = document.getElementById("steps-container");
+      const addStepBtn = document.getElementById("add-step-btn");
+
+      function refreshStepNumbers() {
+        stepsContainer.querySelectorAll(".step-input-row").forEach((row, i) => {
+          row.querySelector("span").textContent = i + 1;
+        });
+      }
+
+      addStepBtn.onclick = () => {
+        const count = stepsContainer.children.length + 1;
+        const row = document.createElement("div");
+        row.className = "step-input-row";
+        row.style.cssText = "display: flex; gap: 0.5rem; align-items: center;";
+        row.innerHTML = `
+          <span style="font-weight: 700; width: 1.5rem; text-align: center;">${count}</span>
+          <input type="text" class="form-input step-input" placeholder="Describe this step..." required>
+          <button type="button" class="btn-icon remove-step-btn" style="width: 2rem; height: 2rem;" title="Remove step">&times;</button>
+        `;
+        row.querySelector(".remove-step-btn").onclick = () => {
+          row.remove();
+          refreshStepNumbers();
+        };
+        stepsContainer.appendChild(row);
+      };
+
+      // Form submission
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        const title = document.getElementById("recipe-title-input").value.trim();
+        const time = document.getElementById("recipe-time-input").value.trim();
+        const difficulty = document.getElementById("recipe-diff-select").value;
+        const servings = parseInt(document.getElementById("recipe-servings-input").value, 10) || 2;
+        const tipsRaw = document.getElementById("recipe-tips-input").value.trim();
+        const tips = tipsRaw ? [tipsRaw] : [];
+
+        const steps = Array.from(stepsContainer.querySelectorAll(".step-input"))
+          .map(inp => inp.value.trim())
+          .filter(Boolean);
+
+        Store.addRecipe({
+          title,
+          image: recipeImageUrl,
+          time,
+          difficulty,
+          servings,
+          ingredients: recipeIngredients,
+          steps: steps.length ? steps : ["Cook all ingredients together."],
+          tips
+        });
+
+        form.style.display = "none";
+        successView.style.display = "block";
+        window.USEITUP_COMMON.showToast("Recipe successfully added!");
+      };
+
+      document.getElementById("add-another-btn").onclick = () => {
+        form.reset();
+        recipeIngredients = ["Tomato", "Pasta"];
+        renderIngredients();
+        dropzone.style.display = "flex";
+        previewBox.style.display = "none";
+        form.style.display = "block";
+        successView.style.display = "none";
+      };
+
+      if (window.lucide) window.lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

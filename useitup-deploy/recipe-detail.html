@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Recipe Detail — USE IT UP</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .recipe-hero-media {
+      position: relative;
+      height: 55vh;
+      min-height: 400px;
+      overflow: hidden;
+    }
+    .recipe-hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .recipe-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(16, 23, 36, 0.4) 0%, rgba(16, 23, 36, 0.85) 100%);
+    }
+    .recipe-hero-content {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 0;
+      right: 0;
+      color: var(--cream);
+    }
+    .recipe-action-bar {
+      background: var(--bg-surface);
+      border-radius: var(--radius-xl);
+      padding: 1.25rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border);
+      margin-top: -2.5rem;
+      position: relative;
+      z-index: 10;
+      margin-bottom: 3.5rem;
+    }
+    .recipe-step-item {
+      display: flex;
+      gap: 1.25rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-number {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: var(--radius-full);
+      background: var(--navy);
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+      font-size: 0.875rem;
+    }
+    html.dark .step-number {
+      background: var(--cream);
+      color: var(--navy-900);
+    }
+    .ingredient-check-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9375rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .ingredient-check-item input[type="checkbox"] {
+      width: 1.15rem;
+      height: 1.15rem;
+      accent-color: var(--leaf);
+      cursor: pointer;
+    }
+    .ingredient-check-item.checked {
+      text-decoration: line-through;
+      color: var(--text-subtle);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header"></header>
+
+  <main style="padding-top: 5rem; padding-bottom: 6rem;">
+    <div id="recipe-not-found" style="display: none; text-align: center; padding: 8rem 1rem;">
+      <h2 style="margin-bottom: 1rem;" id="not-found-msg">We couldn't find that recipe.</h2>
+      <a href="recipes.html" class="btn btn-primary" id="not-found-back">Back to recipes</a>
+    </div>
+
+    <div id="recipe-content" style="display: none;">
+      <!-- Hero -->
+      <div class="recipe-hero-media">
+        <img id="detail-img" src="" alt="" loading="eager" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&q=80&auto=format&fit=crop';">
+        <div class="recipe-hero-overlay"></div>
+        <div class="recipe-hero-content">
+          <div class="container">
+            <a href="recipes.html" style="display: inline-flex; align-items: center; gap: 0.5rem; color: rgba(255, 249, 240, 0.85); font-weight: 600; margin-bottom: 1.5rem; font-size: 0.875rem;" id="back-link">
+              <i data-lucide="arrow-left" style="width: 1rem;"></i> Back to recipes
+            </a>
+            <h1 id="detail-title" style="color: var(--cream); font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 0.5rem;"></h1>
+            <p id="detail-author" style="color: rgba(255, 249, 240, 0.75); font-size: 1.125rem;"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- Action Bar -->
+        <div class="recipe-action-bar">
+          <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--text-muted);">
+              <i data-lucide="clock" style="color: var(--navy);"></i> <span id="detail-time"></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--text-muted);">
+              <i data-lucide="flame" style="color: var(--navy);"></i> <span id="detail-difficulty"></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--text-muted);">
+              <i data-lucide="users" style="color: var(--navy);"></i> <span id="detail-servings"></span> <span id="servings-label">servings</span>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <button id="like-recipe-btn" class="btn-icon" aria-label="Like recipe" title="Like recipe">
+              <i data-lucide="heart"></i>
+            </button>
+            <button id="save-recipe-btn" class="btn-icon" aria-label="Save recipe" title="Save to bookmarks">
+              <i data-lucide="bookmark"></i>
+            </button>
+            <button id="share-recipe-btn" class="btn-icon" aria-label="Share recipe" title="Copy share link">
+              <i data-lucide="share-2"></i>
+            </button>
+            <button id="made-this-btn" class="btn btn-leaf" style="padding: 0.65rem 1.25rem;">
+              <i data-lucide="check"></i> <span id="made-this-text">I Made This!</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Recipe Content Split -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 3.5rem;">
+          <div style="display: grid; grid-template-columns: 1fr; gap: 3.5rem;" class="detail-columns">
+            <!-- Left: Ingredients -->
+            <div>
+              <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;" id="ingredients-title">Ingredients</h2>
+              <div id="ingredients-checklist"></div>
+
+              <div id="tips-box" style="margin-top: 2.5rem; background: rgba(244, 162, 97, 0.12); border-left: 4px solid var(--amber); border-radius: var(--radius-md); padding: 1.5rem;">
+                <h3 style="font-size: 1.15rem; margin-bottom: 0.75rem; color: var(--amber-dark);" id="tips-title">Cooking tips</h3>
+                <ul id="tips-list" style="padding-left: 1.25rem; font-size: 0.9375rem; color: var(--text-muted);"></ul>
+              </div>
+            </div>
+
+            <!-- Right: Preparation Steps -->
+            <div>
+              <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;" id="steps-title">Preparation</h2>
+              <div id="steps-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const Store = window.USEITUP_STORE;
+      const urlParams = new URLSearchParams(window.location.search);
+      const recipeId = urlParams.get("id");
+      const recipe = recipeId ? Store.getRecipeById(recipeId) : null;
+
+      const notFoundEl = document.getElementById("recipe-not-found");
+      const contentEl = document.getElementById("recipe-content");
+
+      if (!recipe) {
+        notFoundEl.style.display = "block";
+        document.getElementById("not-found-msg").textContent = Store.t("recipe_not_found");
+        document.getElementById("not-found-back").textContent = Store.t("back_to_recipes");
+        return;
+      }
+
+      contentEl.style.display = "block";
+
+      // Fill texts
+      document.getElementById("back-link").innerHTML = `<i data-lucide="arrow-left" style="width: 1rem;"></i> ${Store.t("back_to_recipes")}`;
+      document.getElementById("detail-title").textContent = recipe.title;
+      document.getElementById("detail-author").textContent = recipe.author;
+      document.getElementById("detail-img").src = recipe.image;
+      document.getElementById("detail-img").alt = recipe.title;
+      document.getElementById("detail-time").textContent = recipe.time;
+      document.getElementById("detail-difficulty").textContent = recipe.difficulty;
+      document.getElementById("detail-servings").textContent = recipe.servings;
+      document.getElementById("servings-label").textContent = Store.t("servings_label");
+      document.getElementById("ingredients-title").textContent = Store.t("recipe_ingredients");
+      document.getElementById("steps-title").textContent = Store.t("recipe_preparation");
+      document.getElementById("tips-title").textContent = Store.t("recipe_cooking_tips");
+      document.getElementById("made-this-text").textContent = Store.t("i_made_this");
+
+      // Ingredients Checklist
+      const ingListEl = document.getElementById("ingredients-checklist");
+      ingListEl.innerHTML = recipe.ingredients.map((ing, idx) => `
+        <label class="ingredient-check-item" id="ing-item-${idx}">
+          <input type="checkbox" data-idx="${idx}">
+          <span>${ing}</span>
+        </label>
+      `).join("");
+
+      ingListEl.querySelectorAll("input[type='checkbox']").forEach(cb => {
+        cb.addEventListener("change", (e) => {
+          const item = e.target.closest(".ingredient-check-item");
+          item.classList.toggle("checked", e.target.checked);
+        });
+      });
+
+      // Steps List
+      const stepsListEl = document.getElementById("steps-list");
+      stepsListEl.innerHTML = recipe.steps.map((st, idx) => `
+        <div class="recipe-step-item">
+          <div class="step-number">${idx + 1}</div>
+          <div style="font-size: 1rem; line-height: 1.6; padding-top: 0.15rem;">${st}</div>
+        </div>
+      `).join("");
+
+      // Cooking Tips
+      const tipsListEl = document.getElementById("tips-list");
+      if (recipe.tips && recipe.tips.length > 0) {
+        tipsListEl.innerHTML = recipe.tips.map(t => `<li style="margin-bottom: 0.5rem;">${t}</li>`).join("");
+      } else {
+        document.getElementById("tips-box").style.display = "none";
+      }
+
+      // Like button
+      const likeBtn = document.getElementById("like-recipe-btn");
+      const isLiked = Store.isRecipeLiked(recipe.id);
+      if (isLiked) {
+        likeBtn.style.color = "var(--amber)";
+        likeBtn.querySelector("i").style.fill = "currentColor";
+      }
+      likeBtn.addEventListener("click", () => {
+        const liked = Store.toggleLikeRecipe(recipe.id);
+        likeBtn.style.color = liked ? "var(--amber)" : "var(--text)";
+        likeBtn.querySelector("i").style.fill = liked ? "currentColor" : "none";
+        window.USEITUP_COMMON.showToast(liked ? "Liked recipe!" : "Unliked recipe.");
+      });
+
+      // Save button
+      const saveBtn = document.getElementById("save-recipe-btn");
+      const isSaved = Store.isRecipeSaved(recipe.id);
+      if (isSaved) {
+        saveBtn.style.color = "var(--navy)";
+        saveBtn.querySelector("i").style.fill = "currentColor";
+      }
+      saveBtn.addEventListener("click", () => {
+        const saved = Store.toggleSaveRecipe(recipe.id);
+        saveBtn.style.color = saved ? "var(--navy)" : "var(--text)";
+        saveBtn.querySelector("i").style.fill = saved ? "currentColor" : "none";
+        window.USEITUP_COMMON.showToast(saved ? "Recipe saved to bookmarks!" : "Recipe removed from bookmarks.");
+      });
+
+      // Share button
+      const shareBtn = document.getElementById("share-recipe-btn");
+      shareBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          window.USEITUP_COMMON.showToast(Store.t("link_copied"));
+        }).catch(() => {
+          window.USEITUP_COMMON.showToast(Store.t("link_copied"));
+        });
+      });
+
+      // "I Made This" button
+      const madeThisBtn = document.getElementById("made-this-btn");
+      madeThisBtn.addEventListener("click", () => {
+        Store.recordMealSaved();
+        window.USEITUP_COMMON.showToast(Store.t("meal_saved_toast"));
+        madeThisBtn.style.transform = "scale(0.95)";
+        setTimeout(() => madeThisBtn.style.transform = "scale(1)", 150);
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

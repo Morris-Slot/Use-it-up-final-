@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>USE IT UP — Turn what you have into something worth making</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <header class="site-header"></header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="floating-container hero-floating"></div>
+      <div class="container relative" style="z-index: 2;">
+        <p class="hero-tagline" id="home-tagline">Stop wasting. Start cooking.</p>
+        <h1 class="hero-title">USE IT UP</h1>
+        <p class="hero-subtitle" id="home-subtitle">
+          Turn what you have into something worth making.
+        </p>
+        <div class="hero-buttons">
+          <a href="scan.html" class="btn btn-primary" id="btn-start-cooking">
+            START COOKING <i data-lucide="arrow-right"></i>
+          </a>
+          <a href="recipes.html" class="btn btn-outline" id="btn-explore-recipes">
+            EXPLORE RECIPES
+          </a>
+        </div>
+
+        <!-- Featured dish badges visible immediately in hero -->
+        <div style="margin-top: 3rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+          <a href="recipe-detail.html?id=creamy-tomato-pasta" style="display: inline-flex; align-items: center; gap: 0.75rem; background: var(--bg-surface); padding: 0.4rem 1rem 0.4rem 0.4rem; border-radius: var(--radius-full); box-shadow: var(--card-shadow); border: 1px solid var(--border);">
+            <img src="https://images.unsplash.com/photo-1516100882582-96c3a05fe590?w=200&q=80&auto=format&fit=crop" alt="Tomato Pasta" style="width: 2.5rem; height: 2.5rem; border-radius: var(--radius-full); object-fit: cover;">
+            <span style="font-size: 0.875rem; font-weight: 600; color: var(--text);">Creamy Tomato Pasta</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);"><i data-lucide="clock" style="width: 0.75rem;"></i> 20m</span>
+          </a>
+          <a href="recipe-detail.html?id=roasted-vegetable-bowl" style="display: inline-flex; align-items: center; gap: 0.75rem; background: var(--bg-surface); padding: 0.4rem 1rem 0.4rem 0.4rem; border-radius: var(--radius-full); box-shadow: var(--card-shadow); border: 1px solid var(--border);">
+            <img src="https://images.unsplash.com/photo-1617474019977-0e105d1b430e?w=200&q=80&auto=format&fit=crop" alt="Veg Bowl" style="width: 2.5rem; height: 2.5rem; border-radius: var(--radius-full); object-fit: cover;">
+            <span style="font-size: 0.875rem; font-weight: 600; color: var(--text);">Roasted Veg Bowl</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);"><i data-lucide="clock" style="width: 0.75rem;"></i> 35m</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT'S IN YOUR KITCHEN -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title" id="section2-title">What's left in your kitchen?</h2>
+        <p class="section-subtitle" id="section2-subtitle">
+          Snap a photo, upload one, or just type it in. USE IT UP turns whatever you've got into your next meal.
+        </p>
+
+        <div class="cards-grid-3">
+          <a href="scan.html?mode=camera" class="entry-card">
+            <div class="icon-wrapper"><i data-lucide="camera" style="width: 2rem; height: 2rem;"></i></div>
+            <h3 id="card-scan-title">SCAN</h3>
+            <p id="card-scan-desc">Take a photo of your ingredients.</p>
+          </a>
+          <a href="scan.html?mode=upload" class="entry-card">
+            <div class="icon-wrapper"><i data-lucide="upload" style="width: 2rem; height: 2rem;"></i></div>
+            <h3 id="card-upload-title">UPLOAD</h3>
+            <p id="card-upload-desc">Upload an existing photo.</p>
+          </a>
+          <a href="scan.html?mode=manual" class="entry-card">
+            <div class="icon-wrapper"><i data-lucide="keyboard" style="width: 2rem; height: 2rem;"></i></div>
+            <h3 id="card-enter-title">ENTER</h3>
+            <p id="card-enter-desc">Add your ingredients manually.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED RECIPES -->
+    <section class="section" style="background: var(--bg-surface-secondary);">
+      <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: gap;">
+          <div>
+            <h2 class="section-title text-left" style="margin-bottom: 0.5rem;" id="featured-title">Featured Recipes</h2>
+            <p style="color: var(--text-muted);" id="featured-subtitle">Loved by the USE IT UP community.</p>
+          </div>
+          <a href="recipes.html" class="btn btn-outline" style="padding: 0.5rem 1.25rem;" id="view-all-recipes">
+            View all <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="recipe-grid" id="featured-recipes-grid"></div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY TEASER -->
+    <section class="section">
+      <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem;">
+          <div>
+            <h2 class="section-title text-left" style="margin-bottom: 0.5rem;" id="community-sec-title">Made something good? Share it.</h2>
+            <p style="color: var(--text-muted);" id="community-sec-subtitle">Post your meals, follow other cooks, and discover recipes made from real leftovers.</p>
+          </div>
+          <a href="community.html" class="btn btn-outline" style="padding: 0.5rem 1.25rem;" id="explore-community-btn">
+            Explore community <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="post-grid" id="home-posts-grid"></div>
+      </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="section text-center" style="background: var(--navy); color: var(--cream);">
+      <div class="container container-tight">
+        <h2 class="font-display" style="font-size: clamp(2.2rem, 5vw, 3.5rem); color: var(--cream); margin-bottom: 1rem;">
+          <span id="cta-line1">Don't throw it away.</span><br>
+          <span style="color: var(--amber);" id="cta-line2">Use it up.</span>
+        </h2>
+        <p style="color: rgba(255, 249, 240, 0.75); margin-bottom: 2rem; font-size: 1.125rem;">
+          Join thousands of cooks creating delicious meals while cutting kitchen waste.
+        </p>
+        <a href="scan.html" class="btn btn-primary" style="background: var(--cream); color: var(--navy-900);">
+          START NOW <i data-lucide="arrow-right"></i>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const Store = window.USEITUP_STORE;
+      window.USEITUP_COMMON.renderFloatingIngredients(".hero-floating");
+
+      // Translate static content
+      document.getElementById("home-tagline").textContent = Store.t("home_tagline");
+      document.getElementById("home-subtitle").textContent = Store.t("home_subtitle");
+      document.getElementById("btn-start-cooking").innerHTML = `${Store.t("btn_start_cooking")} <i data-lucide="arrow-right"></i>`;
+      document.getElementById("btn-explore-recipes").textContent = Store.t("btn_explore_recipes");
+      document.getElementById("section2-title").textContent = Store.t("section2_title");
+      document.getElementById("section2-subtitle").textContent = Store.t("section2_subtitle");
+      document.getElementById("card-scan-title").textContent = Store.t("card_scan_title");
+      document.getElementById("card-scan-desc").textContent = Store.t("card_scan_desc");
+      document.getElementById("card-upload-title").textContent = Store.t("card_upload_title");
+      document.getElementById("card-upload-desc").textContent = Store.t("card_upload_desc");
+      document.getElementById("card-enter-title").textContent = Store.t("card_enter_title");
+      document.getElementById("card-enter-desc").textContent = Store.t("card_enter_desc");
+      document.getElementById("featured-title").textContent = Store.t("section4_title");
+      document.getElementById("featured-subtitle").textContent = Store.t("section4_subtitle");
+      document.getElementById("community-sec-title").textContent = Store.t("section5_title");
+      document.getElementById("community-sec-subtitle").textContent = Store.t("section5_subtitle");
+      document.getElementById("cta-line1").textContent = Store.t("section7_line1");
+      document.getElementById("cta-line2").textContent = Store.t("section7_line2");
+
+      // Render Featured Recipes (first 3)
+      const featuredGrid = document.getElementById("featured-recipes-grid");
+      const recipes = Store.getAllRecipes().slice(0, 3);
+      featuredGrid.innerHTML = recipes.map(r => `
+        <div class="recipe-card">
+          <div class="recipe-card-media">
+            <a href="recipe-detail.html?id=${r.id}">
+              <img src="${r.image}" alt="${r.title}" loading="eager" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&q=80&auto=format&fit=crop';">
+              <div class="overlay"></div>
+            </a>
+            <button class="recipe-like-btn ${Store.isRecipeLiked(r.id) ? 'liked' : ''}" data-id="${r.id}" aria-label="Like recipe">
+              <i data-lucide="heart" style="width: 1rem; height: 1rem; ${Store.isRecipeLiked(r.id) ? 'fill: currentColor;' : ''}"></i>
+            </button>
+            <div class="recipe-badge">${r.category[0] || 'Recipe'}</div>
+          </div>
+          <div class="recipe-card-body">
+            <a href="recipe-detail.html?id=${r.id}">
+              <h3>${r.title}</h3>
+            </a>
+            <div class="recipe-meta">
+              <span><i data-lucide="clock" style="width: 0.875rem;"></i> ${r.time}</span>
+              <span><i data-lucide="flame" style="width: 0.875rem;"></i> ${r.difficulty}</span>
+              <span><i data-lucide="heart" style="width: 0.875rem;"></i> <strong class="likes-count">${r.likes}</strong></span>
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      // Render Recent Posts (first 3)
+      const postsGrid = document.getElementById("home-posts-grid");
+      const posts = Store.getPosts().slice(0, 3);
+      postsGrid.innerHTML = posts.map(p => `
+        <div class="post-card">
+          <div class="post-header">
+            <a href="user.html?username=${p.user}" style="display: flex; align-items: center; gap: 0.75rem;">
+              <img src="${p.avatar}" alt="${p.user}">
+              <span class="user-name">${p.user}</span>
+            </a>
+          </div>
+          <div class="post-media">
+            <img src="${p.image}" alt="${p.caption}" loading="eager" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&q=80&auto=format&fit=crop';">
+          </div>
+
+          <div class="post-body">
+            <div class="post-actions">
+              <button class="post-action-btn like-post-btn ${Store.isPostLiked(p.id) ? 'liked' : ''}" data-id="${p.id}">
+                <i data-lucide="heart" style="width: 1.1rem; height: 1.1rem; ${Store.isPostLiked(p.id) ? 'fill: currentColor;' : ''}"></i>
+                <span>${Store.getPostLikesCount(p.id)}</span>
+              </button>
+              <a href="community.html" class="post-action-btn">
+                <i data-lucide="message-circle" style="width: 1.1rem; height: 1.1rem;"></i>
+                <span>${Store.getPostComments(p.id).length}</span>
+              </a>
+            </div>
+            <p class="post-caption">${p.caption}</p>
+            <div class="post-tags">
+              ${p.ingredients.map(ing => `<span class="post-tag">${ing}</span>`).join("")}
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      // Handle like clicks
+      document.querySelectorAll(".recipe-like-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = btn.getAttribute("data-id");
+          const liked = Store.toggleLikeRecipe(id);
+          btn.classList.toggle("liked", liked);
+          const icon = btn.querySelector("i");
+          if (icon) icon.style.fill = liked ? "currentColor" : "none";
+          const countEl = btn.closest(".recipe-card").querySelector(".likes-count");
+          if (countEl) {
+            const recipe = Store.getRecipeById(id);
+            countEl.textContent = recipe.likes;
+          }
+        });
+      });
+
+      document.querySelectorAll(".like-post-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          const liked = Store.toggleLikePost(id);
+          btn.classList.toggle("liked", liked);
+          btn.querySelector("span").textContent = Store.getPostLikesCount(id);
+          const icon = btn.querySelector("i");
+          if (icon) icon.style.fill = liked ? "currentColor" : "none";
+        });
+      });
+
+      if (window.lucide) window.lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
